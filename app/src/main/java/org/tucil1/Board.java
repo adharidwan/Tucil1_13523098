@@ -8,7 +8,7 @@ public class Board {
     int m;
     Piece[] pieces;
     int pieceCount;
-    int iterationCount = 0;
+    static int iterationCount = 0;
     boolean foundSolution = false;
     int emptyCellCount;
 
@@ -107,6 +107,14 @@ public class Board {
                 }
             }
         }
+    }
+
+    public static int getIterationCount() {
+        return iterationCount;
+    }
+    
+    public static void resetIterationCount() {
+        iterationCount = 0;
     }
 
     public void findCombination(int x, int y, boolean[] usedPieces) {

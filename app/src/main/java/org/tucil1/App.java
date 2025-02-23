@@ -33,6 +33,7 @@ public class App extends Application {
     private Button solveButton;
     private Button saveButton;
     private Button resetButton;
+    private Label metricsLabel;
     
 
     private static final String[] CSS_COLORS = {
@@ -163,7 +164,6 @@ public class App extends Application {
         }
         return pieces;
     }
-
     @Override
     public void start(Stage primaryStage) {
         VBox root = new VBox(20);
@@ -173,20 +173,23 @@ public class App extends Application {
         statusLabel = new Label("Please load a puzzle file");
         statusLabel.setStyle("-fx-font-size: 14px;");
 
+        // Add metrics label
+        metricsLabel = new Label("");
+        metricsLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #666666;");
+
         HBox buttonBox = new HBox(10);
         buttonBox.setAlignment(Pos.CENTER);
 
         Button loadButton = new Button("Load Puzzle");
         solveButton = new Button("Solve!");
         saveButton = new Button("Save as PNG");
-
-        Button resetButton = new Button("Reset");
+        resetButton = new Button("Reset");
 
         solveButton.setDisable(true);
         saveButton.setDisable(true);
         resetButton.setDisable(true);
 
-        buttonBox.getChildren().addAll(resetButton,loadButton, solveButton, saveButton);
+        buttonBox.getChildren().addAll(resetButton, loadButton, solveButton, saveButton);
 
         boardDisplay = new GridPane();
         boardDisplay.setAlignment(Pos.CENTER);
@@ -194,7 +197,7 @@ public class App extends Application {
         boardDisplay.setVgap(1);
         boardDisplay.setStyle("-fx-background-color: white;");
 
-        root.getChildren().addAll(resetButton,statusLabel, buttonBox, boardDisplay);
+        root.getChildren().addAll(statusLabel, metricsLabel, buttonBox, boardDisplay);
 
         loadButton.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
@@ -224,9 +227,9 @@ public class App extends Application {
                     Piece[] pieceList = proccesPieceFromStringList(pieces, p);
                     int pieceCount = p;
 
-                    
                     board = new Board(n, m, pieceList, pieceCount);
                     statusLabel.setText("File loaded: " + selectedFile.getName());
+                    metricsLabel.setText("");  // Clear metrics when loading new puzzle
                     solveButton.setDisable(false);
                     updateBoardDisplay();
                     
@@ -238,14 +241,40 @@ public class App extends Application {
 
         solveButton.setOnAction(e -> {
             if (board != null) {
+                long startTime = System.currentTimeMillis();
+                Board.resetIterationCount();  // Reset iteration count before solving
                 board.solve();
+                long endTime = System.currentTimeMillis();
+                long executionTime = endTime - startTime;
+
                 updateBoardDisplay();
                 saveButton.setDisable(false);
                 resetButton.setDisable(false);
-                statusLabel.setText("Solution found!");
+
+                if (board.foundSolution) {
+                    statusLabel.setText("Solution found!");
+                    metricsLabel.setText(String.format("Execution time: %d ms | Iterations: %d", 
+                        executionTime, Board.getIterationCount()));
+                } else {
+                    statusLabel.setText("No solution found!");
+                    metricsLabel.setText(String.format("Execution time: %d ms | Iterations: %d (No solution)", 
+                        executionTime, Board.getIterationCount()));
+                }
             }
         });
 
+        resetButton.setOnAction(e -> {
+            board.pieces = null;
+            board.grid = null;
+            board = null;
+            updateBoardDisplay();
+            solveButton.setDisable(true);
+            saveButton.setDisable(true);
+            resetButton.setDisable(true);
+            statusLabel.setText("Please load a puzzle file");
+            metricsLabel.setText("");  // Clear metrics on reset
+        });
+    
         saveButton.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.getExtensionFilters().add(
@@ -282,16 +311,7 @@ public class App extends Application {
             }
         });
 
-        resetButton.setOnAction(e -> {
-            board.pieces = null;
-            board.grid = null;
-            board = null;
-            updateBoardDisplay();
-            solveButton.setDisable(true);
-            saveButton.setDisable(true);
-            resetButton.setDisable(true);
-            statusLabel.setText("Please load a puzzle file");
-        });
+
 
         Scene scene = new Scene(root, 600, 500);
         primaryStage.setTitle("Pentomino Solver");
