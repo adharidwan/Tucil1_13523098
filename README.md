@@ -1,6 +1,6 @@
 # IQ Puzzler Pro Solver
 
-![Program Demo](https://tenor.com/view/chaewon-lakers-le-sserafim-kpop-lesserafim-gif-1794741366068201628.gif)
+![CLI Demo](https://tenor.com/view/chaewon-lakers-le-sserafim-kpop-lesserafim-gif-1794741366068201628.gif)
 
 ## Description
 Program pembantai IQ Puzzler pro, dibuat untuk tucil1 IF2211 Strategi Algoritma
