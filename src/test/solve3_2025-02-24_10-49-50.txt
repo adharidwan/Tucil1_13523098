@@ -1,0 +1,11 @@
+Puzzle Solution
+Grid size: 5x5
+Number of pieces: 3
+Iterations: 35
+
+Solution:
+AAAAA
+ACCCA
+AACCA
+BCCCA
+BBCAA
