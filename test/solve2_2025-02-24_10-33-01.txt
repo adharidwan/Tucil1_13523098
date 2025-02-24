@@ -1,0 +1,19 @@
+Puzzle Solution
+Grid size: 13x6
+Number of pieces: 26
+Iterations: 1675
+
+Solution:
+ABBCDD
+AABCCD
+EFFGHH
+EEFGGH
+IJJKLL
+IIJKKL
+MNNOPP
+MMNOOP
+QRRSTT
+QQRSST
+UUVVWW
+XUYVZW
+XXYYZZ
