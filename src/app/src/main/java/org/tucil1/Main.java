@@ -129,7 +129,6 @@ public class Main {
         catch(IOException e){
             System.out.println("Error reading file");
         }finally{
-            scanner.close();
         }
 
         Piece[] finalPieces = proccesPieceFromStringList(pieces,p);
@@ -168,5 +167,6 @@ public class Main {
         if(save.equals("y")){
             board.saveSolution(filename);
         }
+        scanner.close();
     }
 }

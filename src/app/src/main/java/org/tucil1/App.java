@@ -182,8 +182,8 @@ public class App extends Application {
 
         Button loadButton = new Button("Load Puzzle");
         solveButton = new Button("Solve!");
-        savePNGButton = new Button("Save as PNG");     // Assign to class field
-        saveTXTButton = new Button("Save as TXT");     // Assign to class field
+        savePNGButton = new Button("Save as PNG");     
+        saveTXTButton = new Button("Save as TXT");    
         resetButton = new Button("Reset");
 
         solveButton.setDisable(true);
@@ -232,7 +232,7 @@ public class App extends Application {
 
                     board = new Board(n, m, pieceList, pieceCount);
                     statusLabel.setText("File loaded: " + selectedFile.getName());
-                    metricsLabel.setText("");  
+                    metricsLabel.setText(""); 
                     solveButton.setDisable(false);
                     updateBoardDisplay();
                     
