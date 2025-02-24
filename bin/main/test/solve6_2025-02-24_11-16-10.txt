@@ -1,0 +1,10 @@
+Puzzle Solution
+Grid size: 4x4
+Number of pieces: 3
+Iterations: 4
+
+Solution:
+AAAA
+AFFA
+AFBA
+AAAA
