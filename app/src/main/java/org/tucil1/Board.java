@@ -1,5 +1,9 @@
 package org.tucil1;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 public class Board {
@@ -115,6 +119,41 @@ public class Board {
     
     public static void resetIterationCount() {
         iterationCount = 0;
+    }
+
+    public void saveSolution(String filename) {
+        if (!foundSolution) {
+            System.out.println("No solution to save!");
+            return;
+        }
+
+        try {
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
+            String timestamp = now.format(formatter);
+            String fullFilename = filename + "_" + timestamp + ".txt";
+            
+            FileWriter writer = new FileWriter(fullFilename);
+            
+            writer.write("Puzzle Solution\n");
+            writer.write("Grid size: " + n + "x" + m + "\n");
+            writer.write("Number of pieces: " + pieceCount + "\n");
+            writer.write("Iterations: " + iterationCount + "\n\n");
+            
+            writer.write("Solution:\n");
+            for (int i = 1; i <= n; i++) {
+                for (int j = 1; j <= m; j++) {
+                    writer.write(grid[i][j]);
+                }
+                writer.write("\n");
+            }
+            
+            writer.close();
+            System.out.println("Solution saved to: " + fullFilename);
+            
+        } catch (IOException e) {
+            System.err.println("Error saving solution: " + e.getMessage());
+        }
     }
 
     public void findCombination(int x, int y, boolean[] usedPieces) {

@@ -154,10 +154,19 @@ public class Main {
             }
         }
 
+        String filename;
+        System.out.print("Enter output file name: ");
+        filename = scanner.nextLine();
+
         Board board = new Board(n, m, finalPieces, p);
         System.out.println("Board: ");
         board.printBoard();
         System.out.println("Start placing pieces: ");
         board.solve();
+        System.out.println("Save to txt? (y/n)");
+        String save = scanner.nextLine();
+        if(save.equals("y")){
+            board.saveSolution(filename);
+        }
     }
 }

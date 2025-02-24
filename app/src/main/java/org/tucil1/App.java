@@ -31,7 +31,8 @@ public class App extends Application {
     private GridPane boardDisplay;
     private Label statusLabel;
     private Button solveButton;
-    private Button saveButton;
+    private Button savePNGButton;   
+    private Button saveTXTButton;
     private Button resetButton;
     private Label metricsLabel;
     
@@ -173,7 +174,6 @@ public class App extends Application {
         statusLabel = new Label("Please load a puzzle file");
         statusLabel.setStyle("-fx-font-size: 14px;");
 
-        // Add metrics label
         metricsLabel = new Label("");
         metricsLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #666666;");
 
@@ -182,14 +182,17 @@ public class App extends Application {
 
         Button loadButton = new Button("Load Puzzle");
         solveButton = new Button("Solve!");
-        saveButton = new Button("Save as PNG");
+        savePNGButton = new Button("Save as PNG");     // Assign to class field
+        saveTXTButton = new Button("Save as TXT");     // Assign to class field
         resetButton = new Button("Reset");
 
         solveButton.setDisable(true);
-        saveButton.setDisable(true);
+        savePNGButton.setDisable(true);
+        saveTXTButton.setDisable(true);
         resetButton.setDisable(true);
 
-        buttonBox.getChildren().addAll(resetButton, loadButton, solveButton, saveButton);
+        buttonBox.getChildren().addAll(resetButton, loadButton, solveButton, savePNGButton, saveTXTButton);
+
 
         boardDisplay = new GridPane();
         boardDisplay.setAlignment(Pos.CENTER);
@@ -229,7 +232,7 @@ public class App extends Application {
 
                     board = new Board(n, m, pieceList, pieceCount);
                     statusLabel.setText("File loaded: " + selectedFile.getName());
-                    metricsLabel.setText("");  // Clear metrics when loading new puzzle
+                    metricsLabel.setText("");  
                     solveButton.setDisable(false);
                     updateBoardDisplay();
                     
@@ -242,13 +245,14 @@ public class App extends Application {
         solveButton.setOnAction(e -> {
             if (board != null) {
                 long startTime = System.currentTimeMillis();
-                Board.resetIterationCount();  // Reset iteration count before solving
+                Board.resetIterationCount();
                 board.solve();
                 long endTime = System.currentTimeMillis();
                 long executionTime = endTime - startTime;
 
                 updateBoardDisplay();
-                saveButton.setDisable(false);
+                savePNGButton.setDisable(false);
+                saveTXTButton.setDisable(false);  
                 resetButton.setDisable(false);
 
                 if (board.foundSolution) {
@@ -263,19 +267,39 @@ public class App extends Application {
             }
         });
 
+        saveTXTButton.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Save Solution");
+            fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Text Files", "*.txt")
+            );
+            
+            fileChooser.setInitialFileName("puzzle_solution");
+            
+            File file = fileChooser.showSaveDialog(primaryStage);
+            if (file != null) {
+                String filename = file.getAbsolutePath();
+                if (filename.toLowerCase().endsWith(".txt")) {
+                    filename = filename.substring(0, filename.length() - 4);
+                }
+                board.saveSolution(filename);
+            }
+        });
+
         resetButton.setOnAction(e -> {
             board.pieces = null;
             board.grid = null;
             board = null;
             updateBoardDisplay();
             solveButton.setDisable(true);
-            saveButton.setDisable(true);
+            savePNGButton.setDisable(true);   
+            saveTXTButton.setDisable(true); 
             resetButton.setDisable(true);
             statusLabel.setText("Please load a puzzle file");
-            metricsLabel.setText("");  // Clear metrics on reset
+            metricsLabel.setText("");
         });
     
-        saveButton.setOnAction(e -> {
+        savePNGButton.setOnAction(e -> {   
             FileChooser fileChooser = new FileChooser();
             fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("PNG Files", "*.png")
