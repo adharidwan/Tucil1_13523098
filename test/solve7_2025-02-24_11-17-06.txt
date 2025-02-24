@@ -1,0 +1,11 @@
+Puzzle Solution
+Grid size: 5x5
+Number of pieces: 6
+Iterations: 3992
+
+Solution:
+BDDEE
+BBDDE
+ABCDE
+ABCCF
+AAACF

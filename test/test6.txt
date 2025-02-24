@@ -1,0 +1,9 @@
+4 4 3
+DEFAULT
+AAAA
+A  A
+A  A
+AAAA
+FF
+F
+B
